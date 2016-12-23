@@ -25,3 +25,8 @@
 *`risky` haven't done that, could take longer
 
 estimated time ~6h
+
+
+####What is left to do
+1. deploy to gh and test gh-pages
+2. polish ui / minor logic updates
