@@ -19,27 +19,21 @@ object Main extends JSApp {
   }
 
   def content(targetNode: Node): Unit = {
-    val insertCoin = button(onclick := { () => AppCircuit(InsertCoin(CandyCoin(1))) }, "InsertCoin")
+    val insertCoin = button(`class` := "insertCoin", onclick := { () => AppCircuit(InsertCoin(CandyCoin(1))) }, "InsertCoin")
     val candies = AppCircuit.zoom(_.listOfCandies).value
     val coinsSlot = AppCircuit.zoom(_.coinsSlot).value.value
 
-    def renderListings = ul(
-      candies map (c => div(
-        button(onclick := { () => AppCircuit(PurchaseCandy(c.candy)) },
-          s"Purchase ${c.candy.name}, only ${c.quantity} left")))
-    ).render
-
-    val output = renderListings.render
-
     targetNode.appendChild(
-      div(
-        h1("Free candies!"),
-        p(
-          "What candy do you want?"
-        ),
+      div(`class` := "container",
+        h2("Candies for everyone!"),
+        p("What candy do you want?"),
         div(insertCoin),
         div(coinsSlot + " coins"),
-        output
+        ul(`class` := "candyList",
+          candies map (c => div(
+            button(`class` := "candy", onclick := { () => AppCircuit(PurchaseCandy(c.candy)) },
+              s"Purchase ${c.candy.name} for ${c.price.value}cc, only ${c.quantity} left")))
+        )
       ).render
     )
 

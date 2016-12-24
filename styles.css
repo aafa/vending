@@ -1,0 +1,49 @@
+.container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  font-weight: bold;
+  text-align: center;
+}
+
+.container > * {
+  padding: 5px;
+  flex: 1 100%;
+}
+
+.header {
+}
+
+.footer {
+}
+
+.candyList {
+  display: flex;
+  flex-flow: row wrap;
+  text-align: center;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.candy {
+  width: 200px;
+  height: 50px;
+  margin: auto;
+  flex-grow: 1;
+}
+
+.insertCoin {
+  width: 200px;
+  height: 50px;
+  margin: auto;
+}
+
+body {
+  padding: 2em;
+}
