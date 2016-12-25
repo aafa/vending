@@ -19,6 +19,9 @@
 }
 
 .footer {
+  width: 300px;
+  height: 100px;
+  text-align: center;
 }
 
 .candyList {
@@ -36,6 +39,12 @@
   height: 50px;
   margin: auto;
   flex-grow: 1;
+}
+
+.get-candy-slot {
+  width: 200px;
+  height: 50px;
+  margin: auto;
 }
 
 .insertCoin {
