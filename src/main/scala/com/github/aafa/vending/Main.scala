@@ -22,8 +22,8 @@ object Main extends JSApp {
     val insertCoin = button(`class` := "insertCoin", onclick := { () => AppCircuit(InsertCoin(CandyCoin(1))) }, "InsertCoin")
     val candies = AppCircuit.zoom(_.listOfCandies).value
     val coinsSlot = AppCircuit.zoom(_.coinsSlot).value.value
-    val getTheCandy = "get the candy slot"
-    val info = "What candy do you want?"
+    val getTheCandy = AppCircuit.zoom(_.getTheCandySlot).value.map(_.name)
+    val info = AppCircuit.zoom(_.machineInfo).value
 
     targetNode.appendChild(
       div(`class` := "container",
@@ -38,7 +38,7 @@ object Main extends JSApp {
         ),
         div(`class` := "footer",
           button(
-            `class` := "get-candy-slot", onclick := { () => () },
+            `class` := "get-candy-slot", onclick := { () => AppCircuit(CandyTakenFromSlot) },
             getTheCandy
           )
         )

@@ -1,6 +1,6 @@
 package com.github.aafa.vending.diode
 
-import diode.{Action, _}
+import diode._
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -10,6 +10,22 @@ import scala.concurrent.ExecutionContext.Implicits.global
   */
 object AppCircuit extends Circuit[RootModel] {
   override protected def initialModel: RootModel = RootModel()
+
+  val getTheCandySlotHandler = new ActionHandler(zoomRW(_.getTheCandySlot)((model: RootModel, c: Option[Candy]) => model.copy(getTheCandySlot = c))) {
+    override protected def handle = {
+      case GetYourCandy(candy) => updated(Some(candy))
+      case CandyTakenFromSlot => updated(None)
+    }
+  }
+
+  val infoHandler = new ActionHandler(zoomRW(_.machineInfo)((model: RootModel, i: String) => model.copy(machineInfo = i))) {
+    override protected def handle = {
+      case InsertCoin(coin) => updated("What candy do you want?")
+      case NotEnoughCoins(coinsSlot, price) => updated("NotEnoughCoins!")
+      case NoCandiesLeft(candy) => updated("NoCandiesLeft!")
+      case GetYourCandy(candy) => updated("GetYourCandy!")
+    }
+  }
 
   val coinsHandler = new ActionHandler(zoomRW(_.coinsSlot)((model: RootModel, coin: CandyCoin) => model.copy(coinsSlot = coin))) {
     override protected def handle = {
@@ -44,6 +60,8 @@ object AppCircuit extends Circuit[RootModel] {
 
   override protected def actionHandler = foldHandlers(
     coinsHandler,
+    getTheCandySlotHandler,
+    infoHandler,
     listOfCandies
   )
 
@@ -56,14 +74,16 @@ case class RootModel(
                         CandyStock(Candy(c), 10, CandyCoin(1))
                       ),
                       coinsSlot: CandyCoin = CandyCoin(),
-                      coinsInMyPocket: CandyCoin = CandyCoin(100)
+                      coinsInMyPocket: CandyCoin = CandyCoin(100),
+                      machineInfo: String = "What candy do you want?",
+                      getTheCandySlot: Option[Candy] = None
                     )
 
 
 case class Candy(name: String)
 
 // simplify things let it be int for now
-case class CandyCoin(value: Int = 0){
+case class CandyCoin(value: Int = 0) {
   override def toString: String = s"${value}cc"
 }
 
@@ -85,6 +105,8 @@ case class CoinsSpent(c: CandyCoin) extends Action
 case class PurchaseCandy(candy: Candy, quantity: Int = 1) extends Action
 
 case class GetYourCandy(candy: Candy) extends Action
+
+case object CandyTakenFromSlot extends Action
 
 case class NoCandiesLeft(candy: Candy) extends Action
 
