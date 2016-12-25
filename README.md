@@ -13,3 +13,4 @@ Factual time spent was pretty close to my initial estimation even though I stumb
 1. Make UI more smooth and good lookin
 2. Reload only parts of the DOM that was actually modified
 3. Unit test coverage
+4. Persistence!
