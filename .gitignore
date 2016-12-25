@@ -1,7 +1,4 @@
 .idea/
 project/project/
 project/target/
-!/target/
-/target/resolution-cache
-/target/streams
-/target/.history
+/target/
