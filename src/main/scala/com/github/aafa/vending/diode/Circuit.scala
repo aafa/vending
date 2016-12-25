@@ -1,7 +1,8 @@
 package com.github.aafa.vending.diode
 
-import diode._
+import diode.{Action, _}
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -21,23 +22,23 @@ object AppCircuit extends Circuit[RootModel] {
     override protected def handle = {
       case PurchaseCandy(candy, q) =>
         val coinsSlot = modelRW.root.value.coinsSlot
-        val updatedValue: Seq[(CandyStock, diode.Action)] = value.map {
+        val updatedValue: Seq[(CandyStock, Seq[diode.Action])] = value.map {
           case stock: CandyStock if stock.candy == candy =>
             val price = stock.price
             val canPurchase = coinsSlot.value >= price.value
             if (canPurchase) {
-              val batch: ActionBatch = ActionBatch(CoinsSpent(price), GetYourCandy(candy))
-              (stock.buy(q), batch)
+              (stock.buy(q), Seq(CoinsSpent(price), GetYourCandy(candy)))
             } else {
-              (stock, NotEnoughCoins(coinsSlot, price))
+              (stock, Seq(NotEnoughCoins(coinsSlot, price)))
             }
-          case s => (s, NoAction)
+          case s => (s, Seq(NoAction))
         }
 
         val candyStocks: Seq[CandyStock] = updatedValue.map(_._1)
-        val actionResults: ActionBatch = ActionBatch(updatedValue.map(_._2) :_*)
+        val actionResults = updatedValue.flatMap(_._2).map(a => Effect.action(a))
+        val effectSet = new EffectSet(actionResults.head, actionResults.tail.toSet, implicitly[ExecutionContext])
 
-        updated(candyStocks, Effect.action(actionResults))
+        updated(candyStocks, effectSet)
     }
   }
 
@@ -62,10 +63,14 @@ case class RootModel(
 case class Candy(name: String)
 
 // simplify things let it be int for now
-case class CandyCoin(value: Int = 0)
+case class CandyCoin(value: Int = 0){
+  override def toString: String = s"${value}cc"
+}
 
 case class CandyStock(candy: Candy, quantity: Int, price: CandyCoin) {
   def buy(i: Int): CandyStock = this.copy(candy, quantity - i, price)
+
+  override def toString: String = s"$quantity '${candy.name}' for $price"
 }
 
 
