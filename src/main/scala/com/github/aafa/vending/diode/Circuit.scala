@@ -21,9 +21,9 @@ object AppCircuit extends Circuit[RootModel] {
   val infoHandler = new ActionHandler(zoomRW(_.machineInfo)((model: RootModel, i: String) => model.copy(machineInfo = i))) {
     override protected def handle = {
       case InsertCoin(coin) => updated("What candy do you want?")
-      case NotEnoughCoins(coinsSlot, price) => updated("NotEnoughCoins!")
-      case NoCandiesLeft(candy) => updated("NoCandiesLeft!")
-      case GetYourCandy(candy) => updated("GetYourCandy!")
+      case NotEnoughCoins(coinsSlot, price) => updated(s"You don't have enough coins, add ${price.value - coinsSlot.value} more!")
+      case NoCandiesLeft(candy) => updated("Sorry, no candies left! :(")
+      case GetYourCandy(candy) => updated("Get your candy!")
     }
   }
 
@@ -42,10 +42,13 @@ object AppCircuit extends Circuit[RootModel] {
           case stock: CandyStock if stock.candy == candy =>
             val price = stock.price
             val canPurchase = coinsSlot.value >= price.value
-            if (canPurchase) {
-              (stock.buy(q), Seq(CoinsSpent(price), GetYourCandy(candy)))
-            } else {
+            val available = stock.available(q)
+            if (!canPurchase) {
               (stock, Seq(NotEnoughCoins(coinsSlot, price)))
+            } else if (!available) {
+              (stock, Seq(NoCandiesLeft(candy)))
+            } else {
+              (stock.buy(q), Seq(CoinsSpent(price), GetYourCandy(candy)))
             }
           case s => (s, Seq(NoAction))
         }
@@ -88,6 +91,8 @@ case class CandyCoin(value: Int = 0) {
 }
 
 case class CandyStock(candy: Candy, quantity: Int, price: CandyCoin) {
+  def available(q: Int) = quantity >= q
+
   def buy(i: Int): CandyStock = this.copy(candy, quantity - i, price)
 
   override def toString: String = s"$quantity '${candy.name}' for $price"
