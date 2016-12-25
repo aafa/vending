@@ -1,0 +1,19 @@
+[0m[[0minfo[0m] [0mFull optimizing /Users/aafa/Projects/sandbox/vending/target/scala-2.11/i-want-my-candies-opt.js[0m
+[0m[[0mdebug[0m] [0mLinker: Compute reachability: 42808 us[0m
+[0m[[0mdebug[0m] [0mLinker: Assemble LinkedClasses: 15508 us[0m
+[0m[[0mdebug[0m] [0mBasic Linking: 60162 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Batch mode: true[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Incremental part: 15762 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Optimizing 3918 methods.[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Optimizer part: 117177 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: 134473 us[0m
+[0m[[0mdebug[0m] [0mRefiner: Compute reachability: 39122 us[0m
+[0m[[0mdebug[0m] [0mRefiner: Assemble LinkedClasses: 2859 us[0m
+[0m[[0mdebug[0m] [0mRefiner: 42048 us[0m
+[0m[[0mdebug[0m] [0mEmitter: Class tree cache stats: reused: 0 -- invalidated: 470[0m
+[0m[[0mdebug[0m] [0mEmitter: Method tree cache stats: resued: 0 -- invalidated: 1969[0m
+[0m[[0mdebug[0m] [0mEmitter (create Closure trees): 227006 us[0m
+[0m[[0minfo[0m] [0mClosure: 0 error(s), 0 warning(s)[0m
+[0m[[0mdebug[0m] [0mClosure: Compiler pass: 5393608 us[0m
+[0m[[0mdebug[0m] [0mClosure: Write result: 410812 us[0m
+[0m[[0mdebug[0m] [0mGlobal IR cache stats: reused: 53 -- invalidated: 0 -- trees read: 0[0m

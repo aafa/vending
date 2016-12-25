@@ -1,0 +1,12 @@
+run
+last compile:scalaJSLauncher 
+run
+reload
+run
+reload
+fastOptJS
+run
+reload
+fastOptJS
+~fastOptJS
+fullOptJS
