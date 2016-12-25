@@ -19,7 +19,7 @@ object Main extends JSApp {
   }
 
   def content(targetNode: Node): Unit = {
-    val insertCoin = button(`class` := "insertCoin", onclick := { () => AppCircuit(InsertCoin(CandyCoin(1))) }, "InsertCoin")
+    val insertCoin = button(`class` := "insertCoin", onclick := { () => AppCircuit(InsertCoin(CandyCoin(1))) }, ">> Insert CandyCoin here <<")
     val candies = AppCircuit.zoom(_.listOfCandies).value
     val coinsSlot = AppCircuit.zoom(_.coinsSlot).value.value
     val getTheCandy = AppCircuit.zoom(_.getTheCandySlot).value.map(_.name)
@@ -28,7 +28,7 @@ object Main extends JSApp {
     targetNode.appendChild(
       div(`class` := "container",
         h2("Candies for everyone!"),
-        p(info),
+        div(info),
         div(insertCoin),
         div(coinsSlot + " coins"),
         ul(`class` := "candyList",
