@@ -49,13 +49,11 @@ object AppCircuit extends Circuit[RootModel] {
             val available = stock.available(q)
             if (candySlot.nonEmpty) {
               (stock, Seq(GrabYourCandyFirst(candy)))
-            }
-            else if (!canPurchase) {
+            } else if (!canPurchase) {
               (stock, Seq(NotEnoughCoins(coinsSlot, price)))
             } else if (!available) {
               (stock, Seq(NoCandiesLeft(candy)))
-            }
-            else {
+            } else {
               (stock.buy(q), Seq(CoinsSpent(price), GetYourCandy(candy)))
             }
           case s => (s, Seq(NoAction))
